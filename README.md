@@ -15,11 +15,6 @@ To get started, install the required Python packages:
 ```sh
 pip install -r requirements.txt
 ```
-### Possible problems & solutions
-Initially there was a persistent silent failure within the `langchain_community.document_loaders.DirectoryLoader` class when running on a Windows machine. It could be established that the problem was a deep-seated incompatibility between how `DirectoryLoader` handles file processing in parallel to the specific environment.
-
-Therefore, since `DirectoryLoader` remained unstable, it was replaced by a manual loading process using `UnstructuredMarkdownLoader`.
-
 ## Process summary
 
 ### Loading and preparation
@@ -47,5 +42,22 @@ Finally, the script uses an OpenAI model to write questions with ground-truth an
 ```
 You can see from the `synthesizer_name` column that the final output uses different strategies, from simple, direct questions (`single_hop_specific_query`) to more complex questions using multiple documents (`multi_hop_abstract_query`).
 
+## Things to note
 
+### Possible problems & solutions
+Initially there was a persistent silent failure within the `langchain_community.document_loaders.DirectoryLoader` class when running on a Windows machine. It could be established that the problem was a deep-seated incompatibility between how `DirectoryLoader` handles file processing in parallel to the specific environment.
 
+Therefore, since `DirectoryLoader` remained unstable, it was replaced by a manual loading process using `UnstructuredMarkdownLoader`.
+
+### Privacy & security
+
+As RAGAS itself is a library that runs locally on your machine, it won't send your data anywhere. The `TestsetGenerator` uses an external service: an OpenAI API call.
+
+#### OpenAI's API Data Policy
+- OpenAI does NOT use data submitted via their API to train or improve their models.
+- Your data is retained for a limited period (e.g., 30 days) for abuse and misuse monitoring, after which it is deleted.
+- Data is encrypted in transit (using TLS) and at rest.
+
+Something to note, though: _"While this is a strong privacy promise, the fact remains that your confidential data is being processed on servers you do not control. For highly sensitive information, many organizations consider this an unacceptable risk."_
+
+Other alternatives are to use Microsoft Azure OpenAI Service or to run local, open-source models.
