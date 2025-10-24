@@ -14,3 +14,41 @@ To get started, install the required Python packages:
 
 ```sh
 pip install -r requirements.txt
+```
+### Possible problems & solutions
+Initially there was a persistent silent failure within the `langchain_community.document_loaders.DirectoryLoader` class when running on a Windows machine. It could be established that the problem was a deep-seated incompatibility between how `DirectoryLoader` handles file processing in parallel to the specific environment.
+
+Therefore, since `DirectoryLoader` remained unstable, it was replaced by a manual loading process using `UnstructuredMarkdownLoader`.
+
+## Process summary
+
+### Loading and preparation
+
+The manual loading process mentioned above is used. 11 Markdown files from the `Sample_Docs_Markdown` directory are loaded.
+
+### Document Analysis
+
+Ragas' `TestsetGenerator` performs a deep analysis of the documents to understand them. The documents are then split into smaller chunks based on their headings. Thereafter, the `_Extractor` tools are used to identify main topics and themes that are present across the documents. The `NERExtractor` method is used to find specific keywords by performing Named Entity Recognition.
+
+### Persona and Scenario Generation
+
+Ragas uses the previous analysis to create different user personas who might be interested in the documents. It then creates scenarios where these personas would ask questions (e.g., "A new employee wants to know how to be a good ally"). This ensures the generated questions are realistic and varied.
+
+### Generating the questions and answers
+
+Finally, the script uses an OpenAI model to write questions with ground-truth answers. 
+
+```text
+
+--- Generated Testset (First 5 Rows) ---
+                                          user_input                                 reference_contexts                                          reference                       synthesizer_name
+0  How can Zoom meetings be used effectively to p...  [Skills and Behaviors of allies\n\nTo be an ef...  Zoom meetings can be used effectively to promo...  single_hop_specific_query_synthesizer
+1  What is the purpose of the ALLG in promoting a...  [Tips on being an ally Identifying your power ...  The ALLG, or Ally Lab Learning Group, is an in...  single_hop_specific_query_synthesizer
+2  How can the Diversity, Inclusion & Belonging S...  [What it means to be an ally\n\nTake on the st...  The Diversity, Inclusion & Belonging Sharing P...  single_hop_specific_query_synthesizer
+3  How does GitLab use CultureAmp to support dive...  [title: "Building an Inclusive Remote Culture"...  The DIB team at GitLab runs an annual survey v...  single_hop_specific_query_synthesizer
+4  How do DIB roundtables facilitate empowerment ...  [<1-hop>\n\ntitle: "Roundtables" description: ...  DIB roundtables facilitate empowerment and inc...   multi_hop_abstract_query_synthesizer
+```
+You can see from the `synthesizer_name` column that the final output uses different strategies, from simple, direct questions (`single_hop_specific_query`) to more complex questions using multiple documents (`multi_hop_abstract_query`).
+
+
+
