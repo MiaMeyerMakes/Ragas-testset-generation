@@ -42,6 +42,27 @@ Finally, the script uses an OpenAI model to write questions with ground-truth an
 ```
 You can see from the `synthesizer_name` column that the final output uses different strategies, from simple, direct questions (`single_hop_specific_query`) to more complex questions using multiple documents (`multi_hop_abstract_query`).
 
+## Tuning & controls
+
+1. ### Tune the size of the testset
+   1. This can be done with the `testset_size=10` argument in `generate_with_langchain_docs()`
+   2. The recommended number of Q&A sets is typically **between 50 and 150**.
+2. ### Controlling the complexity of the questions
+   1. You have control over the mix of question types.
+      2. The main types of questions are:
+         1. `simple`
+         2. `reasoning`
+         3. `multi_hop`
+         4. `conditional`
+      3. You can pass `question_distributions` in to the `TestsetGenerator`:
+          ```    
+         question_distributions = {
+                  "simple": 0.4,      # 40% simple questions
+                  "reasoning": 0.3,   # 30% reasoning questions
+                  "multi_hop": 0.3    # 30% multi-hop questions
+              }
+         ```
+
 ## Things to note
 
 ### Possible problems & solutions
