@@ -38,10 +38,7 @@ Ragas uses the previous analysis to create different user personas who might be 
 
 Finally, the script uses an OpenAI model to write questions with ground-truth answers. 
 
-```text
-
---- Generated Testset (First 5 Rows) ---
-                                          user_input                                 reference_contexts                                          reference                       synthesizer_name
+```text                                   user_input                                 reference_contexts                                          reference                       synthesizer_name
 0  How can Zoom meetings be used effectively to p...  [Skills and Behaviors of allies\n\nTo be an ef...  Zoom meetings can be used effectively to promo...  single_hop_specific_query_synthesizer
 1  What is the purpose of the ALLG in promoting a...  [Tips on being an ally Identifying your power ...  The ALLG, or Ally Lab Learning Group, is an in...  single_hop_specific_query_synthesizer
 2  How can the Diversity, Inclusion & Belonging S...  [What it means to be an ally\n\nTake on the st...  The Diversity, Inclusion & Belonging Sharing P...  single_hop_specific_query_synthesizer
