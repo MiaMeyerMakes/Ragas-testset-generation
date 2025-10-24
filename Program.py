@@ -59,12 +59,28 @@ def main():
         dataset = generator.generate_with_langchain_docs(all_docs, testset_size=10)
         logging.info("Testset generation complete!")
 
-        # --- 6. Display Results ---
-        logging.info("Converting dataset to pandas DataFrame and displaying the first 5 rows.")
+        # --- 6. Convert to DataFrame and Display Results ---
+        logging.info("Converting dataset to pandas DataFrame...")
         df = dataset.to_pandas()
         print("\n--- Generated Testset (First 5 Rows) ---")
         print(df.head())
         print("-----------------------------------------")
+
+        # --- 7. Save the Testset to a File ---
+        # Create a directory to store the test data if it doesn't exist
+        output_dir = "test_data"
+        os.makedirs(output_dir, exist_ok=True)
+
+        # Save as a CSV file
+        csv_path = os.path.join(output_dir, "ragas_testset.csv")
+        df.to_csv(csv_path, index=False)
+        logging.info(f"Testset successfully saved to: {csv_path}")
+
+        # (Optional) Save as a JSON file
+        json_path = os.path.join(output_dir, "ragas_testset.json")
+        df.to_json(json_path, orient="records", indent=4)
+        logging.info(f"Testset successfully saved to: {json_path}")
+
 
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}", exc_info=True)
